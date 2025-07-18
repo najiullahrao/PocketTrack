@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 // import styles from './HomeStyles';  
 import { db } from '../firebase/config';
 import {
@@ -40,6 +40,7 @@ import formatDate from '../utils/formatDate';
 import FilterModal from '../components/FilterModal';
 import { MaterialIcons } from '@expo/vector-icons';
 import styles from './HomeStyles';
+import useReload from '../utils/useReload';
 
 interface Expense {
   id: string;
@@ -112,6 +113,8 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
   const [budgetCategory, setBudgetCategory] = useState('food');
   const [budgetAmount, setBudgetAmount] = useState('');
   const [budgetPeriod, setBudgetPeriod] = useState<'monthly' | 'weekly' | 'daily'>('monthly');
+
+  const { refreshing, reload } = useReload();
 
   // Load expenses
   useEffect(() => {
@@ -558,6 +561,8 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
     </View>
           )
         }
+        refreshing={refreshing}
+        onRefresh={reload}
       />
 
       {/* Edit Modal */}

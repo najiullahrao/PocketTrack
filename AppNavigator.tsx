@@ -6,12 +6,14 @@ import HomeScreen from './screens/HomeScreen';
 import AddExpenseScreen from './screens/AddExpenseScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import BudgetsScreen from './screens/BudgetsScreen';
+import MonthlyExpensesScreen from './screens/MonthlyExpensesScreen';
 
 export type RootDrawerParamList = {
   Home: undefined;
   AddExpense: undefined;
   Profile: undefined;
   Budgets: undefined;
+  MonthlyExpenses: undefined;
 };
 
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
@@ -22,8 +24,9 @@ export default function AppNavigator() {
       <Drawer.Navigator initialRouteName="Home">
         <Drawer.Screen name="Home" component={HomeScreen} />
         <Drawer.Screen name="AddExpense" component={AddExpenseScreen} />
-        <Drawer.Screen name="Profile" component={ProfileScreen} />
         <Drawer.Screen name="Budgets" component={BudgetsScreen} />
+        <Drawer.Screen name="MonthlyExpenses" component={MonthlyExpensesScreen} options={{ title: 'Monthly Expenses' }} />
+        <Drawer.Screen name="Profile" component={ProfileScreen} />
       </Drawer.Navigator>
     </NavigationContainer>
   );

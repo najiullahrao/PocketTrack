@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, SafeAreaView, FlatList, StyleSheet, TouchableOpacity, Alert, Modal, TextInput, Platform } from 'react-native';
 import { db } from '../firebase/config';
 import { collection, onSnapshot, orderBy, query, deleteDoc, doc, addDoc, updateDoc } from 'firebase/firestore';
+import useReload from '../utils/useReload';
 
 interface Budget {
   id: string;
@@ -23,6 +24,8 @@ export default function BudgetsScreen() {
   const [period, setPeriod] = useState<'monthly' | 'weekly' | 'daily'>('monthly');
   const [saving, setSaving] = useState(false);
   const [editingBudget, setEditingBudget] = useState<Budget | null>(null);
+
+  const { refreshing, reload } = useReload();
 
   useEffect(() => {
     const q = query(collection(db, 'budgets'), orderBy('createdAt', 'desc'));
@@ -95,7 +98,22 @@ export default function BudgetsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Budgets</Text>
+      <View style={{ alignItems: 'center', marginBottom: 20 }}>
+        <Text
+          style={[
+            styles.title,
+            {
+              fontSize: 28,
+              color: '#111827',
+              fontWeight: '700',
+              letterSpacing: 0.5,
+              marginBottom: 4,
+            },
+          ]}
+        >
+          Budget Overview
+        </Text>
+      </View>
       <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
         <Text style={styles.addButtonText}>+ Add Budget</Text>
       </TouchableOpacity>
@@ -119,6 +137,8 @@ export default function BudgetsScreen() {
           </View>
         )}
         ListEmptyComponent={<Text style={styles.empty}>No budgets found.</Text>}
+        refreshing={refreshing}
+        onRefresh={reload}
       />
       <Modal
         visible={modalVisible}
